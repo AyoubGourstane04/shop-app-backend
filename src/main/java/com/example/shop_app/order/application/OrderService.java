@@ -4,13 +4,18 @@ import com.example.shop_app.Inventory.application.InventoryService;
 import com.example.shop_app.catalog.api.dto.ProductResponse;
 import com.example.shop_app.catalog.application.ProductService;
 import com.example.shop_app.catalog.domain.Product;
+import com.example.shop_app.common.outbox.OutboxEvent;
+import com.example.shop_app.common.outbox.OutboxRepository;
 import com.example.shop_app.common.service.IdempotencyService;
 import com.example.shop_app.order.api.dto.CheckoutRequest;
 import com.example.shop_app.order.api.dto.OrderItemRequest;
 import com.example.shop_app.order.api.dto.OrderResponse;
 import com.example.shop_app.order.domain.Order;
+import com.example.shop_app.order.domain.OrderCreatedEvent;
 import com.example.shop_app.order.domain.OrderItem;
 import com.example.shop_app.order.infrastructure.OrderRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,8 @@ public class OrderService {
     private final ProductService productService;
     private final InventoryService inventoryService;
     private final IdempotencyService idempotencyService;
+    private final OutboxRepository outboxRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public OrderResponse processCheckout(String idempotencyKey, CheckoutRequest request){
@@ -52,6 +59,29 @@ public class OrderService {
 
             Order saved = orderRepository.save(order);
 
+            OrderCreatedEvent event = new OrderCreatedEvent(
+                    saved.getId(),
+                    saved.getOrderNumber(),
+                    saved.getCustomerId(),
+                    saved.getTotalAmount(),
+                    saved.getCurrency(),
+                    saved.getCreatedAt()
+            );
+
+            try {
+                String payload = objectMapper.writeValueAsString(event);
+                OutboxEvent outboxEvent = new OutboxEvent(
+                        "ORDER",
+                        saved.getId(),
+                        "Order Created",
+                        payload
+                );
+                outboxRepository.save(outboxEvent);
+                log.info("Persisted OutboxEvent for Order {}", saved.getOrderNumber());
+            }catch (JsonProcessingException ex){
+                throw new RuntimeException("Failed to serialize order event", ex);
+            }
+
             OrderResponse response = OrderResponse.fromEntity(saved);
 
             idempotencyService.complete(idempotencyKey, response);
@@ -62,8 +92,6 @@ public class OrderService {
             idempotencyService.unlock(idempotencyKey);
             throw e;
         }
-
-
     }
 
 

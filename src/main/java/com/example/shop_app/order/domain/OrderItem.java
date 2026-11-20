@@ -1,0 +1,42 @@
+package com.example.shop_app.order.domain;
+
+import com.example.shop_app.common.domain.BaseEntity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+
+@Entity
+@Table(name = "order_items")
+@Getter
+@Setter
+@NoArgsConstructor
+public class OrderItem extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
+
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
+
+    @Column(name = "unit_price", nullable = false, precision = 12, scale = 3)
+    private BigDecimal unitPrice;
+
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    public OrderItem(UUID productId, String productName, BigDecimal unitPrice, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+    }
+
+}

@@ -1,6 +1,7 @@
 package com.example.shop_app.payment.application;
 
-import com.example.shop_app.Inventory.application.InventoryService;
+import com.example.shop_app.inventory.application.InventoryService;
+import com.example.shop_app.common.metrics.MetricService;
 import com.example.shop_app.order.domain.Order;
 import com.example.shop_app.order.domain.OrderItem;
 import com.example.shop_app.order.domain.OrderStatus;
@@ -25,6 +26,7 @@ public class PaymentService {
     private final OrderRepository orderRepository;
     private final InventoryService inventoryService;
     private final ExternalPaymentGatewayClient gatewayClient;
+    private final MetricService metricService;
 
     @Transactional
     @CircuitBreaker(name = "paymentGateway", fallbackMethod = "paymentFallback")
@@ -74,6 +76,7 @@ public class PaymentService {
         for(OrderItem item : order.getItems()){
             inventoryService.releaseStock(item.getProductId(), item.getQuantity());
         }
+        metricService.incrementPaymentsFailed();
 
         log.info("Saga Compensation Complete: Released stock back to inventory for Order {}.", order.getOrderNumber());
     }

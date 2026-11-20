@@ -1,6 +1,6 @@
-package com.example.shop_app.Inventory.infrastructure;
+package com.example.shop_app.inventory.infrastructure;
 
-import com.example.shop_app.Inventory.domain.Inventory;
+import com.example.shop_app.inventory.domain.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

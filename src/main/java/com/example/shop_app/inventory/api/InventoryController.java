@@ -1,7 +1,7 @@
-package com.example.shop_app.Inventory.api;
+package com.example.shop_app.inventory.api;
 
-import com.example.shop_app.Inventory.application.InventoryService;
-import com.example.shop_app.Inventory.domain.Inventory;
+import com.example.shop_app.inventory.application.InventoryService;
+import com.example.shop_app.inventory.domain.Inventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

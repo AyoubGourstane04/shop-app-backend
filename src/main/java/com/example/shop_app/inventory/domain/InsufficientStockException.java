@@ -1,4 +1,4 @@
-package com.example.shop_app.Inventory.domain;
+package com.example.shop_app.inventory.domain;
 
 import java.util.UUID;
 

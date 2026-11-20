@@ -1,9 +1,9 @@
 package com.example.shop_app.order.application;
 
-import com.example.shop_app.Inventory.application.InventoryService;
+import com.example.shop_app.inventory.application.InventoryService;
 import com.example.shop_app.catalog.api.dto.ProductResponse;
 import com.example.shop_app.catalog.application.ProductService;
-import com.example.shop_app.catalog.domain.Product;
+import com.example.shop_app.common.metrics.MetricService;
 import com.example.shop_app.common.outbox.OutboxEvent;
 import com.example.shop_app.common.outbox.OutboxRepository;
 import com.example.shop_app.common.service.IdempotencyService;
@@ -33,6 +33,7 @@ public class OrderService {
     private final IdempotencyService idempotencyService;
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
+    private final MetricService metricService;
 
     @Transactional
     public OrderResponse processCheckout(String idempotencyKey, CheckoutRequest request){
@@ -83,6 +84,7 @@ public class OrderService {
             }
 
             OrderResponse response = OrderResponse.fromEntity(saved);
+            metricService.incrementOrdersCreated();
 
             idempotencyService.complete(idempotencyKey, response);
 
@@ -93,12 +95,5 @@ public class OrderService {
             throw e;
         }
     }
-
-
-
-
-
-
-
 
 }

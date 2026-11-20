@@ -1,8 +1,8 @@
-package com.example.shop_app.Inventory.application;
+package com.example.shop_app.inventory.application;
 
-import com.example.shop_app.Inventory.domain.InsufficientStockException;
-import com.example.shop_app.Inventory.domain.Inventory;
-import com.example.shop_app.Inventory.infrastructure.InventoryRepository;
+import com.example.shop_app.inventory.domain.InsufficientStockException;
+import com.example.shop_app.inventory.domain.Inventory;
+import com.example.shop_app.inventory.infrastructure.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

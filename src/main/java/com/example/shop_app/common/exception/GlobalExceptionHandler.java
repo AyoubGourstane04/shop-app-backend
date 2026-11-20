@@ -1,6 +1,6 @@
 package com.example.shop_app.common.exception;
 
-import com.example.shop_app.Inventory.domain.InsufficientStockException;
+import com.example.shop_app.inventory.domain.InsufficientStockException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

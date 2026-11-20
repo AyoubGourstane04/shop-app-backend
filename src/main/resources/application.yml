@@ -2,9 +2,9 @@ spring:
   application:
     name: shop-app
   datasource:
-    url: jdbc:postgresql://localhost:5432/shopdb
-    username: user
-    password: passwd
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:shopdb}
+    username: ${DB_USER:user}
+    password: ${DB_PASSWORD:passwd}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

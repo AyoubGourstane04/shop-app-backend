@@ -1,7 +1,6 @@
 package com.example.shop_app.order.api.dto;
 
 import com.example.shop_app.order.domain.Order;
-import com.example.shop_app.order.domain.OrderItem;
 import com.example.shop_app.order.domain.OrderStatus;
 
 import java.math.BigDecimal;

@@ -16,7 +16,29 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ProblemDetail handleBadCredentials(org.springframework.security.authentication.BadCredentialsException ex){
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+        problem.setTitle("Authentication Failed");
+        problem.setDetail("Invalid email or password");
+        return problem;
+    }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail handleBadCredentials(IllegalArgumentException ex){
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problem.setTitle("Invalid Request");
+        problem.setDetail(ex.getMessage());
+        return problem;
+    }
+
+    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    public ProblemDetail handleArgsNotValid(org.springframework.web.bind.MethodArgumentNotValidException ex){
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+        problem.setTitle("Authentication Failed");
+        problem.setDetail("Invalid email or password");
+        return problem;
+    }
 
 
 

@@ -15,6 +15,9 @@ public record ProductResponse(
         BigDecimal price,
         String currency,
         ProductStatus status,
+        String imageUrl,
+        String categoryId,
+        boolean isFeatured,
         Instant createdAt
 ) {
     public static ProductResponse fromEntity(Product p){
@@ -26,6 +29,9 @@ public record ProductResponse(
                 p.getPrice(),
                 p.getCurrency(),
                 p.getStatus(),
+                p.getImageUrl(),
+                p.getCategoryId(),
+                p.isFeatured(),
                 p.getCreatedAt()
         );
     }

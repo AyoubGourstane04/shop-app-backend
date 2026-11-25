@@ -34,13 +34,31 @@ public class Product extends BaseEntity {
     @Column(nullable = false, length = 32)
     private ProductStatus status = ProductStatus.DRAFT;
 
-    public Product(String sku, String name, String description, BigDecimal price, String currency) {
+    @Column(name = "image_url", columnDefinition = "TEXT")
+    private String imageUrl;
+
+    @Column(name = "category_id", length = 64)
+    private String categoryId;
+
+    @Column(name = "is_featured", nullable = false)
+    private boolean isFeatured = false;
+
+
+
+    public Product(String sku, String name, String description, BigDecimal price, String currency,  String imageUrl, String categoryId, boolean isFeatured) {
         this.sku = sku;
         this.name = name;
         this.description = description;
         this.price = price;
         this.currency = (currency != null) ? currency : "MAD";
         this.status = ProductStatus.DRAFT;
+        this.imageUrl = imageUrl;
+        this.categoryId = categoryId;
+        this.isFeatured = isFeatured;
+    }
+
+    public Product(String sku, String name, String description, BigDecimal price, String currency) {
+        this(sku, name, description, price, currency, null, null, false);
     }
 
 }

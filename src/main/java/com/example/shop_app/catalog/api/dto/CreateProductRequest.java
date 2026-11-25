@@ -10,6 +10,9 @@ public record CreateProductRequest(
         @NotBlank(message = "Name is required") String name,
         String description,
         @NotNull(message = "Price is required") BigDecimal price,
-        String currency
+        String currency,
+        String imageUrl,
+        String categoryId,
+        Boolean isFeatured
         ) {
 }

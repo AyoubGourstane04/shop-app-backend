@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -27,10 +29,15 @@ public class InventoryController {
     }
 
     @GetMapping("/{productId}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public Inventory getStock(@PathVariable UUID productId){
         return inventoryService.getStock(productId);
     }
 
+    @PostMapping("/batch-check")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<UUID, Integer> batchCheckStock(@RequestBody List<UUID> productIds){
+        return inventoryService.getStockBatch(productIds);
+    }
 
 }

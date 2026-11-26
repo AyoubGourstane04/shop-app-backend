@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,6 +65,12 @@ public class InventoryService {
         return inventoryRepository.findByProductId(productId).orElseThrow(
                 () -> new IllegalArgumentException("No inventory record for product " + productId)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Map<UUID, Integer> getStockBatch(List<UUID> productIds){
+        return inventoryRepository.findByProductIdIn(productIds).stream()
+                .collect(Collectors.toMap(Inventory::getProductId, Inventory::getAvailableQuantity));
     }
 
 
